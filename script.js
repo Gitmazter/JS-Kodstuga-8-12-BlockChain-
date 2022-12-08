@@ -18,11 +18,25 @@ console.log("hashArray:", hashArray);
 let HashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 console.log("HashHex:", HashHex); */
 
+
+// EXAMPLE ENCRYPTION DIV
 const example = document.querySelector("#example_input")
 const output = document.querySelector("#output");
 const cryptBtn = document.querySelector("#cryptBtn");
 
-//SHA 256 FUNCTION! :O Am a real Kriptograffer naow
+
+async function consumeCrypto (input) {
+    let pWordInt8 = new TextEncoder().encode(input);
+    let hashBuffer = await crypto.subtle.digest("SHA-256", pWordInt8);
+    let hashArray = Array.from(new Uint8Array(hashBuffer));
+    let HashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    return HashHex;
+
+}
+
+output.innerHTML = await consumeCrypto(example.value);
+
+/* //SHA 256 FUNCTION! :O Am a real Kriptograffer naow
 let password = "testar";
 let pWordInt8 = new TextEncoder().encode(password);
 let hashBuffer = await crypto.subtle.digest("SHA-256", pWordInt8);
@@ -32,16 +46,33 @@ console.log("HashHex:", HashHex);
 
 cryptBtn.addEventListener('click', function() {
     hashFunc();
+}); */
+
+import UserList from "./userList.js";
+import User from "./user.js";
+
+let createName = document.querySelector("#createName");
+let createPassword = document.querySelector("#createPassword");
+let createBtn = document.querySelector("#createBtn");
+
+let loginName = document.querySelector("#loginName");
+let loginPassword = document.querySelector("#loginPassword");
+let loginBtn = document.querySelector("#loginBtn");
+
+createBtn.addEventListener('click', () => {
+    users.addUser(new User(createName.value, createPassword.value));
+    console.log("users", users);
 });
 
-async function hashFunc () {
-    let input = example.value;
-    let pWordInt8 = new TextEncoder().encode(input);
-    let hashBuffer = await crypto.subtle.digest("SHA-256", pWordInt8);
-    let hashArray = Array.from(new Uint8Array(hashBuffer));
-    let HashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-    output.innerHTML = `Your hash: ${HashHex}`;
-    location.reload;
+loginBtn.addEventListener('click', () => {
+    let foundUser = users._users.find(user => user._name === loginName.value);
+    console.log("foundUser", foundUser);
+    foundUser.checkPassword(loginPassword.value);
     
-}
+});
+
+let users = new UserList();
+console.log("userList", users)
+
+
 
