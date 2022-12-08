@@ -64,11 +64,11 @@ createBtn.addEventListener('click', () => {
     console.log("users", users);
 });
 
-loginBtn.addEventListener('click', () => {
+loginBtn.addEventListener('click', async () => {
     let foundUser = users._users.find(user => user._name === loginName.value);
-    console.log("foundUser", foundUser);
-    foundUser.checkPassword(loginPassword.value);
-    
+    let userId = await foundUser.checkPassword(loginPassword.value);
+    localStorage.setItem("userId", userId);
+    console.log("userId in LS: ",localStorage.getItem('userId'));
 });
 
 let users = new UserList();

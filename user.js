@@ -27,10 +27,10 @@ export default class User {
 
         if (testPassword == this._password) {
             console.log("correct password");
-            console.log(this._id);
             return this._id;
         } else {
             console.log("Wrong Password");
+            return false;
         }
     }
 }
